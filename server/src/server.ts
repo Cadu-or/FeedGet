@@ -1,14 +1,12 @@
 import express from 'express'
+import cors from 'cors'
+import { routes } from './routes'
 
-const app = express()
+const app = express();
 
-app.use(express.json())
-
-app.post('/feedbacks', (req, res) => {
-  console.log(req.body);
-
-  return res.send('Helloooo');
-})
+app.use(cors());
+app.use(express.json());
+app.use(routes);
 
 app.listen(8000, () => {
   console.log('HTTP server runing!');
