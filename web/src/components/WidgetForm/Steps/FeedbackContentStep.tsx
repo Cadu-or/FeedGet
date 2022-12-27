@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { FeedbackType, feedbackTypes } from "..";
 import { CloseButton, ArrowLeftButton, SendFeedback, TakeScreenshot } from "../../Buttons";
+import { api } from '../../../lib/api'
 
 interface FeedbackContentStepProps {
   feedbackType: FeedbackType
@@ -12,14 +13,27 @@ export function FeedbackContentStep({ feedbackType, onFeedbackNull, onFeedbackSe
   const feedbackTypeInfo = feedbackTypes[feedbackType];
   const [screenshot, setScreenshot] = useState<string | null>(null)
   const [comment, setComment] = useState('')
+  const [isSendingFeedback, setIsSendingFeedback] = useState(false)
 
-  function handleSubmitFeedback(event: FormEvent) {
+  async function handleSubmitFeedback(event: FormEvent) {
     event.preventDefault()
-    console.log({
-      screenshot,
-      comment
-    })
-    onFeedbackSent()
+
+    setIsSendingFeedback(true);
+
+    // console.log({
+    //   screenshot,
+    //   comment
+    // })
+
+    await api.post('/feedbacks', {
+      type: feedbackType,
+      comment,
+      screenshot
+    });
+
+    setIsSendingFeedback(false);
+
+    onFeedbackSent();
   }
 
   return (
@@ -51,7 +65,8 @@ export function FeedbackContentStep({ feedbackType, onFeedbackNull, onFeedbackSe
             screenshot={screenshot}
             onScreenshotTook={setScreenshot}
           />
-          <SendFeedback comment={comment} />
+          <SendFeedback comment={comment} isSendingFeedback={isSendingFeedback}/>
+          
         </footer>
       </form>
     </>

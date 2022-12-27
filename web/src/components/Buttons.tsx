@@ -24,17 +24,18 @@ export function ArrowLeftButton() {
 
 interface SendFeedbackProps {
   comment: string
+  isSendingFeedback: boolean
 }
 
-export function SendFeedback({ comment }: SendFeedbackProps) {
+export function SendFeedback({ comment, isSendingFeedback }: SendFeedbackProps) {
 
   return (
     <button
       type="submit"
       className="p-2 bg-brand-500 rounded-md border-transparent flex-1 flex justify-center items-center text-sm hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors disabled:hover:bg-brand-500 disabled:opacity-50"
-      disabled={comment.length === 0}
+      disabled={comment.length === 0 || isSendingFeedback}
     >
-      Enviar Feedback
+      {isSendingFeedback ? <Loading /> : 'Enviar Feedback'}
 
     </button>
   )
@@ -77,7 +78,7 @@ export function TakeScreenshot({ screenshot, onScreenshotTook }: screenshotButto
   return (
     <button
       type="button"
-      className="p-2 bg-zinc-800 rounded-md border-transparent hover:bg-zinc-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500"
+      className="p-2 bg-zinc-800 rounded-md border-transparent hover:bg-zinc-700 transition-colors focus:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500"
       onClick={handleTakeScreenshot}
     >
       {isTakingScreenshot ? <Loading /> : <Camera className="w-6 h-6" />}
